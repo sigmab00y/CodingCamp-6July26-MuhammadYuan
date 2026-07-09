@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SigmaUang</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="auth-screen" class="auth-container">
+        <div class="auth-mascot-container">
+            <div class="auth-speech-bubble">
+                <p id="auth-mascot-speech">Halo Bos! Selamat datang di SigmaUang. Silakan masuk ke akunmu terlebih dahulu ya!</p>
+            </div>
+            <div class="auth-mascot-character">
+                <a href="https://www.instagram.com/menkeuri" target="_blank" style="width: 100%; height: 100%; display: flex;">
+                    <img src="images/mascot.png" alt="Mascot Lobi" onerror="this.style.display='none'; this.parentNode.innerText='🙋‍♂️'">
+                </a>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <h1 class="auth-title">💰 SigmaUang</h1>
+            <p class="auth-subtitle">Kelola keuangan pribadi dengan asisten virtualmu</p>
+            
+            <form id="login-form">
+                <h3>Masuk ke Akun</h3>
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required placeholder="Masukkan username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="Masukkan password">
+                </div>
+                <button type="submit" class="btn-submit">Masuk</button>
+                <p class="auth-switch">Belum punya akun? <a href="#" id="to-register">Daftar di sini</a></p>
+            </form>
+
+            <form id="register-form" style="display: none;">
+                <h3>Buat Akun Baru</h3>
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" required placeholder="Pilih username unik">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" required placeholder="Buat password kuat">
+                </div>
+                <button type="submit" class="btn-submit btn-success">Daftar Akun</button>
+                <p class="auth-switch">Sudah punya akun? <a href="#" id="to-login">Login di sini</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-screen" style="display: none;">
+        <header>
+            <div class="header-container">
+                <h1>💰 SigmaUang</h1>
+                <div class="header-actions">
+                    <span id="user-display" style="margin-right: 10px; font-weight: bold; font-size: 0.9rem;"></span>
+                    <button id="theme-toggle" class="btn-toggle" style="margin-right: 5px;">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button id="logout-btn" class="btn-toggle style-danger">
+                        <i class="fas fa-sign-out-alt"></i> Keluar
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="mascot-section">
+                <div id="mascot-container">
+                    <div class="speech-bubble">
+                        <p id="mascot-speech">Memuat laporan keuangan Anda...</p>
+                    </div>
+                    <div class="mascot-character">
+                        <a href="https://www.instagram.com/menkeuri" target="_blank" style="width: 100%; height: 100%; display: flex;">
+                            <img src="images/mascot.png" id="mascot-avatar" alt="Bendahara Pribadi" onerror="this.style.display='none'; this.parentNode.innerText='🙋‍♂️'">
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="balance-card">
+                <div class="balance-item">
+                    <small>TOTAL BALANCE</small>
+                    <h2 id="total-balance">Rp 0</h2>
+                </div>
+                <div class="vertical-divider"></div>
+                <div class="balance-item">
+                    <small>MONTHLY EXPENSE (<span id="current-month">Month</span>)</small>
+                    <h3 id="monthly-total">Rp 0</h3>
+                    <span id="limit-badge" class="badge-safe">Limit Belum Diatur</span>
+                </div>
+            </section>
+
+            <section class="card limit-section">
+                <div class="form-group">
+                    <label for="budget-limit">Atur Batas Anggaran Bulanan (Rp)</label>
+                    <input type="number" id="budget-limit" placeholder="Contoh: 2000000">
+                </div>
+            </section>
+
+            <section class="card form-section">
+                <h3>Tambah Transaksi Baru</h3>
+                
+                <div class="trx-tabs-container">
+                    <button type="button" id="tab-expense" class="tab-btn active-expense">Pengeluaran</button>
+                    <button type="button" id="tab-income" class="tab-btn">Pemasukan</button>
+                </div>
+
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label for="item-name">Nama Kebutuhan / Sumber</label>
+                        <input type="text" id="item-name" placeholder="Contoh: Gaji bulanan / Beli makan" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amount">Jumlah (Rp)</label>
+                            <input type="number" id="amount" placeholder="Contoh: 50000" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Kategori</label>
+                            <select id="category" required>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="custom-category-group" class="form-group dynamic-input" style="display: none; margin-top: 10px;">
+                        <label for="custom-category-input">Nama Kategori Baru</label>
+                        <div class="form-row">
+                            <input type="text" id="custom-category-input" placeholder="Contoh: Tagihan, Tabungan">
+                            <button type="button" id="btn-save-category" class="btn-secondary">Tambah</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" style="margin-top: 15px;">Simpan Transaksi</button>
+                </form>
+            </section>
+
+            <section class="card chart-section">
+                <h3>Distribusi Pengeluaran</h3>
+                <div class="chart-container">
+                    <canvas id="expense-chart"></canvas>
+                </div>
+            </section>
+
+            <section class="card list-section">
+                <div class="list-header">
+                    <h3>Riwayat Transaksi</h3>
+                    <div class="sort-container">
+                        <label for="sort-by"><i class="fas fa-filter"></i> Urutan:</label>
+                        <select id="sort-by">
+                            <option value="latest">Terbaru</option>
+                            <option value="amount-high">Nominal Tertinggi</option>
+                            <option value="amount-low">Nominal Terendah</option>
+                            <option value="category">Kategori</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="scrollable-list">
+                    <ul id="transaction-list">
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
